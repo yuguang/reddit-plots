@@ -1,5 +1,7 @@
 import pandas as pd
 from connect import engine
+from collections import defaultdict, Counter
+import networkx as nx
 
 df = pd.read_sql_query("""
 SELECT subreddit_a, subreddit_b, COUNT(DISTINCT author) as authors
@@ -36,3 +38,27 @@ WHERE a.subreddit1!=b.subreddit2 AND b.comments > a.threshold
 GROUP BY subreddit_a, subreddit_b
 ORDER BY authors DESC
 LIMIT 70000;""", engine)
+
+THRESHOLD = 51
+related_subreddit = defaultdict(list)
+subreddit_count = Counter()
+# for each item in subreddit_b
+for line in df.values:
+    subreddit_a, subreddit_b, weight = line
+    if subreddit_count[subreddit_a] < THRESHOLD and subreddit_count[subreddit_b] < THRESHOLD:
+        # append subreddit_a to list in dictionary
+        related_subreddit[subreddit_b].append((subreddit_a, weight))
+        # keep a count of how many times a subreddit has been linked
+        subreddit_count[subreddit_a] += 1
+        subreddit_count[subreddit_b] += 1
+
+
+G = nx.Graph()
+for node, subreddits in related_subreddit.iteritems():
+    # display only the top k links
+    for subreddit in subreddits[:THRESHOLD]:
+        name, weight = subreddit
+        G.add_edge(node, name, weight=weight)
+
+nx.draw(G)
+nx.write_gexf(G, 'graph.gexf')
