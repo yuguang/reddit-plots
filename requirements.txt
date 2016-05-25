@@ -4,3 +4,6 @@ SQLAlchemy
 plotly
 matplotlib
 networkx
+django
+djangorestframework
+MySQL-python
