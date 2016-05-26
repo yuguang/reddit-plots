@@ -28,7 +28,6 @@ JOIN (
     FROM reddit_comments
     GROUP BY subreddit HAVING COUNT(created_utc) > 1000
   )
-  ORDER BY comments
 --   get authors who have commented in the subreddit at least 10 times
   GROUP BY author, subreddit HAVING COUNT(subreddit) > 9
 ) AS b(author2, subreddit2, comments)
@@ -37,9 +36,9 @@ WHERE a.subreddit1!=b.subreddit2 AND b.comments > a.threshold
 ) 
 GROUP BY subreddit_a, subreddit_b
 ORDER BY authors DESC
-LIMIT 70000;""", engine)
+LIMIT 5000000;""", engine)
 
-THRESHOLD = 51
+THRESHOLD = 8
 related_subreddit = defaultdict(list)
 subreddit_count = Counter()
 # for each item in subreddit_b
