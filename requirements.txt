@@ -7,3 +7,5 @@ networkx
 django
 djangorestframework
 MySQL-python
+wordcloud
+pillow
