@@ -14,6 +14,8 @@ d = path.dirname(__file__)
 text = open(path.join(d, 'examples/alice.txt')).read()
 subreddit = 'AskReddit'
 
+WIDTH = 800
+HEIGHT = 600
 url = "https://www.reddit.com/r/{}/top/.json?limit=5&t=all".format(subreddit)
 opener = urllib2.build_opener()
 opener.addheaders = [('User-agent', 'my_unique_downloader')]
@@ -31,8 +33,8 @@ try:
     if len(image.histogram()) < 500:
         raise Exception
     coloring = np.array(image)
-    wc = WordCloud(background_color="white", max_words=500, mask=coloring,
-                   stopwords=STOPWORDS.add("said"),
+    wc = WordCloud(background_color="white", width=WIDTH, height=HEIGHT, max_words=500, mask=coloring,
+                   stopwords=STOPWORDS,
                    max_font_size=40, scale=1.5)
     # generate word cloud
     wc.generate(text)
@@ -46,8 +48,7 @@ try:
     plt.axis("off")
 except:
     # take relative word frequencies into account, lower max_font_size
-    wordcloud = WordCloud(background_color="white", max_font_size=40, relative_scaling=.5).generate(text)
-    plt.figure()
+    wordcloud = WordCloud(background_color="white", width=WIDTH, height=HEIGHT, max_words=500, stopwords=STOPWORDS, max_font_size=40).generate(text)
     plt.imshow(wordcloud)
     plt.axis("off")
 fig = plt.gcf()
