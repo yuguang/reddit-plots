@@ -23,6 +23,9 @@ for line in df.values:
         normalized_length = 1
     color = Accents(normalized_length)
     r,g,b,a = color
-    output.append({'x': float(int(gilds)/float(comments)), 'y': avg_score, 'z': comments, 'name': subreddit, 'color': colors.rgb2hex((r,g,b))})
+    gilded_percent = float(int(gilds)/float(comments))
+    if not gilded_percent > 0.00000000001:
+        continue
+    output.append({'x': gilded_percent, 'y': avg_score, 'z': comments, 'name': subreddit, 'color': colors.rgb2hex((r,g,b))})
 with open('bubble.json', 'w') as outfile:
     json.dump(output, outfile)
