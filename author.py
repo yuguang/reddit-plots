@@ -46,18 +46,18 @@ plot_url = py.plot(Figure(data=data, layout=layout))
 upvote_frequency = pd.read_sql_query("""
     SELECT ups::INT, COUNT(created_utc) as frequency
     FROM reddit_comments
-    WHERE ups > 0
+    WHERE ups > -1
     GROUP BY ups
     ORDER BY ups ASC;
     """, engine)
 
-df = upvote_frequency[0:100]
+df = upvote_frequency[0:21]
 data = [
     Bar(
         x=df.ups,
         y=df.frequency
     )
 ]
-layout = Layout(title="Upvotes for Reddit submissions from 2007 - 2015", yaxis=YAxis(title="Frequency"), xaxis=XAxis(title="Upvotes"))
+layout = Layout(title="Upvotes for Reddit submissions", yaxis=YAxis(title="Frequency"), xaxis=XAxis(title="Upvotes"))
 plot_url = py.plot(Figure(data=data, layout=layout))
 
